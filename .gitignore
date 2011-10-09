@@ -1,0 +1,11 @@
+*pyc
+*pyo
+build/
+debian/files
+debian/python-metricana.debhelper.log
+debian/python-metricana.postinst.debhelper
+debian/python-metricana.preinst.debhelper
+debian/python-metricana.prerm.debhelper
+debian/python-metricana.substvars
+debian/python-metricana/
+metricana.egg-info/
