@@ -17,22 +17,21 @@ class Metricana(object):
     def _get_nonce(self):
         return os.urandom(4).encode('hex')
 
-    def sign(self, message):
+    def _sign(self, message):
         full_message = '%s|%x|%d|%s' % (self._get_nonce(), time.time(), self.user_id, message)
         return '%s|%s' % (hmac.HMAC(self.api_key, full_message).hexdigest()[:8], full_message)
 
+    def _send_signed(self, message):
+        self._udp_socket.sendto(self._sign(message), socket.MSG_DONTWAIT, (self.host, self.port))
+
     def int(self, key, value):
-        self.send_signed('i|%s|%d' % (key, value))
+        self._send_signed('i|%s|%d' % (key, value))
 
     def mark(self, key):
-        self.send_signed('m|%s|m' % (key, ))
+        self._send_signed('m|%s|m' % (key, ))
 
     def float(self, key, value):
-        self.send_signed('f|%s|%f' % (key, value))
-
-    def send_signed(self, message):
-        print self.sign(message)
-        self._udp_socket.sendto(self.sign(message), socket.MSG_DONTWAIT, (self.host, self.port))
+        self._send_signed('f|%s|%f' % (key, value))
 
     def runtime(self, key):
         def create_decorator(f):
