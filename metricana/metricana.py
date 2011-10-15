@@ -14,10 +14,6 @@ class Metricana(object):
 
         self._udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def sign(self, message):
-        full_message = '%d|%d|%s' % (time.time() * 1000, self.user_id, message)
-        return '%s|%s' % (hmac.HMAC(self.api_key, full_message).hexdigest()[:8], full_message)
-
     def _get_nonce(self):
         return os.urandom(4).encode('hex')
 
