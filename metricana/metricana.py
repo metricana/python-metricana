@@ -12,7 +12,7 @@ class Metricana(object):
         self.host = host
         self.port = port
 
-        self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self._udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def sign(self, message):
         full_message = '%d|%d|%s' % (time.time() * 1000, self.user_id, message)
@@ -36,7 +36,7 @@ class Metricana(object):
 
     def send_signed(self, message):
         print self.sign(message)
-        self.udp_socket.sendto(self.sign(message), socket.MSG_DONTWAIT, (self.host, self.port))
+        self._udp_socket.sendto(self.sign(message), socket.MSG_DONTWAIT, (self.host, self.port))
 
     def runtime(self, key):
         def create_decorator(f):
